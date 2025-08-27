@@ -1,76 +1,124 @@
-# open-align
+# Open Align
 
-open-align is a Python CLI tool to align and crop a set of handheld photos.
-It detects ORB features, estimates similarity transforms, warps all images 
-into the reference frame (the first image), and computes the common overlap crop
-so black borders from alignment are removed.
+A Python tool for aligning and cropping handheld photos using computer vision techniques. Open Align detects ORB features, estimates similarity transforms, warps images into a reference frame, and computes the common overlap crop to remove black borders from alignment.
 
-# -------------------------------------------------------------------
-# Installation
-# -------------------------------------------------------------------
+## Features
 
-# Clone and install in editable mode:
+- **Feature Detection**: Uses ORB (Oriented FAST and Rotated BRIEF) features for robust image matching
+- **Image Alignment**: Automatically aligns multiple handheld photos to a reference image
+- **Smart Cropping**: Removes black borders and computes optimal crop regions
+- **GUI Interface**: Modern PyQt6-based graphical interface for easy image selection and preview
+- **CLI Support**: Command-line interface for batch processing and automation
+- **Cross-platform**: Works on Windows, macOS, and Linux
 
+## Installation
+
+### Prerequisites
+
+- Python ≥ 3.9
+- Git
+
+### Install from Source
+
+```bash
+# Clone the repository
 git clone https://github.com/yourname/open-align.git
 cd open-align
+
+# Create and activate virtual environment
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Install in editable mode
 pip install -e .
+```
 
-# Requires Python ≥ 3.9. Dependencies:
-# - opencv-python
-# - numpy
-# - typer
-# - rich
+### Dependencies
 
-# -------------------------------------------------------------------
-# Usage
-# -------------------------------------------------------------------
+The following packages are automatically installed:
+- `opencv-python` - Computer vision and image processing
+- `numpy` - Numerical computing
+- `typer` - CLI framework
+- `rich` - Terminal formatting
 
-# Run via the module entrypoint:
 
+## Usage
+
+### Graphical Interface
+
+Launch the GUI application:
+
+```bash
+python -m open_align
+```
+
+The GUI provides:
+- **Image Selection**: Drag and drop or browse for images
+- **Settings**: Configure number of features to detect
+- **Preview**: View selected images before processing
+- **Crop Preview**: Interactive cropping interface
+
+### Command Line Interface
+
+Process images directly from the command line:
+
+```bash
 python -m open_align align [OPTIONS] FILES...
+```
 
-# -------------------------------------------------------------------
-# Example
-# -------------------------------------------------------------------
+#### Example
 
+```bash
 python -m open_align align \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0801.jpg \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0803.jpg \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0804.jpg \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0805.jpg \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0806.jpg \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0807.jpg \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0808.jpg \
-  /Users/juan/Pictures/cam/aug-25/movimiento/IMG_0809.jpg \
+  /path/to/image1.jpg \
+  /path/to/image2.jpg \
+  /path/to/image3.jpg \
+  --nfeatures 4000 \
   --erode 200
+```
 
-# This will:
-# 1. Detect ORB features (default --nfeatures 4000).
-# 2. Estimate transforms for each image → reference.
-# 3. Warp images into reference coordinates.
-# 4. Compute overlap across masks, eroded by 200px for safety.
-# 5. Save aligned + cropped results as aligned_cropped_###.jpg in the working directory.
+## Options
 
-# -------------------------------------------------------------------
-# Options
-# -------------------------------------------------------------------
+| Option | Description | Default |
+|--------|-------------|---------|
+| `-n, --nfeatures INTEGER` | Number of ORB features to detect | 4000 |
+| `-e, --erode INTEGER` | Erosion size for overlap mask (pixels) | 4 |
+| `-v, --version` | Show version and exit | - |
 
-# -n, --nfeatures INTEGER   Number of ORB features to detect (default: 4000)
-# -e, --erode INTEGER       Erosion size for overlap mask (default: 4)
-# -v, --version             Show version and exit
+## How It Works
 
-# -------------------------------------------------------------------
-# Output
-# -------------------------------------------------------------------
+1. **Feature Detection**: Detects ORB features in all input images
+2. **Feature Matching**: Matches features between each image and the reference
+3. **Transform Estimation**: Estimates similarity transforms for alignment
+4. **Image Warping**: Warps all images into the reference coordinate system
+5. **Overlap Computation**: Finds the common overlap region across all images
+6. **Cropping**: Applies erosion and crops to remove black borders
+7. **Output**: Saves aligned and cropped images
 
-# - ref_matches_all.png  → keypoints detected on the reference image.
-# - aligned_###.png      → warped images (optional, for debugging).
-# - aligned_cropped_###.jpg → final aligned + cropped images.
+## Output Files
 
-# -------------------------------------------------------------------
-# License
-# -------------------------------------------------------------------
+- `ref_matches_all.png` - Keypoints detected on the reference image (for debugging)
+- `aligned_###.png` - Warped images before cropping (optional, for debugging)
+- `aligned_cropped_###.jpg` - Final aligned and cropped images
 
-# MIT © 2025
+## Example Workflow
+
+```bash
+# 1. Select images in the GUI or specify them on command line
+python -m open_align align image1.jpg image2.jpg image3.jpg
+
+# 2. The tool will:
+#    - Detect 4000 ORB features per image
+#    - Align all images to the first image (reference)
+#    - Compute the common overlap region
+#    - Crop to remove black borders
+#    - Save results as aligned_cropped_001.jpg, aligned_cropped_002.jpg, etc.
+```
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+MIT © 2025

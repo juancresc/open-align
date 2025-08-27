@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "open-align"
+version = "0.1.0"
+description = "Example: installable package with CLI and optional GUI"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+authors = [{ name = "Juan Manuel Crescente" }]
+dependencies = [
+  "typer>=0.12.3",
+  "rich>=13.7.0",
+  "PyQt6>=6.7",
+  "opencv-python>=4.12",
+  "matplotlib>=3.10"
+]
+
+# console_scripts exposes a shell command `open-align`
+[project.scripts]
+open-align = "open_align.cli:main"
+
+[project.urls]
+Homepage = "https://example.com/open-align"  # replace later
+
+# If you later add a non-stdlib UI lib, declare it under optional-dependencies.
+[tool.hatch.build.targets.wheel]
+packages = ["src/open_align"]

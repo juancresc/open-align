@@ -28,17 +28,12 @@ def main_callback(
 def align(
     files: list[Path] = typer.Argument(..., help="List of image files"),
     nfeatures: int = typer.Option(4000, "--nfeatures", "-n", help="Number of ORB features to detect"),
+    erode: int = typer.Option(4, "--erode", "-e", help="Erosion size for mask overlap")
 ):
     """
     Validate that each file exists and echo the absolute path.
     """
-    align_cmd(files, nfeatures)
-
-@app.command()
-def gui():
-    """Launch the Tkinter GUI."""
-    from .gui import launch_gui
-    launch_gui()
+    align_cmd(files, nfeatures, erode)
 
 def main():
     app()

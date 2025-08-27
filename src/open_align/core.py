@@ -100,7 +100,7 @@ def _common_overlap_rect(masks: list[np.ndarray], erode: int = 4) -> tuple[int, 
     return x0, y0, w, h
 
 
-def align(files: List[Path], nfeatures: int = 4000, ):
+def align(files: List[Path], nfeatures: int = 4000, erode: int = 4):
     """
     Load images, detect ORB features, and report good matches to the reference image.
     (Alignment transform estimation comes next.)
@@ -229,7 +229,10 @@ def align(files: List[Path], nfeatures: int = 4000, ):
             color=(255, 0, 0),  # red for "all"
             flags=cv.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS,
         )
-        out_all = Path.cwd() / "ref_matches_all.png"
+
+        out_dir = Path.cwd() / "out"
+        out_dir.mkdir(exist_ok=True)
+        out_all = out_dir / "ref_matches_all.png"
         if cv.imwrite(str(out_all), ref_vis_all):
             rprint(f"[green]Saved[/] cumulative matched ref keypoints → {out_all}")
         else:
@@ -240,32 +243,29 @@ def align(files: List[Path], nfeatures: int = 4000, ):
         rprint(f"  good matches to reference (ratio=0.75): {len(good)}")
 
         # --- ADD: save aligned outputs for a quick check ---
-        out_dir = Path.cwd()
         for i, img in enumerate(aligned_bgr):
             out_path = out_dir / f"aligned_{i:03d}.png"
             if cv.imwrite(str(out_path), img):
                 rprint(f"[green]Saved[/] {out_path}")
             else:
                 rprint(f"[red]Failed to save {out_path}")
-    
-    # --- ADD: compute automatic common-overlap rect and crop all aligned images ---
-    try:
-        x, y, w, h = _common_overlap_rect(aligned_masks, erode=50)  # tweak erode as needed
-        rprint(f"[cyan]Common overlap:[/] x={x}, y={y}, w={w}, h={h}")
-    except Exception as e:
-        rprint(f"[bold red]ERROR computing overlap:[/] {e}")
-        raise typer.Exit(code=3)
+        
+        # --- ADD: compute automatic common-overlap rect and crop all aligned images ---
+        try:
+            x, y, w, h = _common_overlap_rect(aligned_masks, erode=erode)  # tweak erode as needed
+            rprint(f"[cyan]Common overlap:[/] x={x}, y={y}, w={w}, h={h}")
+        except Exception as e:
+            rprint(f"[bold red]ERROR computing overlap:[/] {e}")
+            raise typer.Exit(code=3)
 
-    cropped = [img[y:y+h, x:x+w].copy() for img in aligned_bgr]
+        cropped = [img[y:y+h, x:x+w].copy() for img in aligned_bgr]
 
-    # optional: save cropped results
-    out_dir = Path.cwd()
-    for i, img in enumerate(cropped):
-        out_path = out_dir / f"aligned_cropped_{i:03d}.jpg"
-        if cv.imwrite(str(out_path), img, [cv.IMWRITE_JPEG_QUALITY, 100]):
-            rprint(f"[green]Saved[/] {out_path}")
-        else:
-            rprint(f"[red]Failed to save {out_path}")
+        for i, img in enumerate(cropped):
+            out_path = out_dir / f"aligned_cropped_{i:03d}.jpg"
+            if cv.imwrite(str(out_path), img, [cv.IMWRITE_JPEG_QUALITY, 100]):
+                rprint(f"[green]Saved[/] {out_path}")
+            else:
+                rprint(f"[red]Failed to save {out_path}")
 
 
     if not results:

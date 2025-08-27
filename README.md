@@ -44,28 +44,6 @@ The following packages are automatically installed:
 
 ## Usage
 
-### Graphical Interface
-
-Launch the GUI application:
-
-```bash
-python -m open_align
-```
-
-The GUI provides:
-- **Image Selection**: Drag and drop or browse for images
-- **Settings**: Configure number of features to detect
-- **Preview**: View selected images before processing
-- **Crop Preview**: Interactive cropping interface
-
-### Command Line Interface
-
-Process images directly from the command line:
-
-```bash
-python -m open_align align [OPTIONS] FILES...
-```
-
 #### Example
 
 ```bash

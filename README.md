@@ -7,9 +7,6 @@ A Python tool for aligning and cropping handheld photos using computer vision te
 - **Feature Detection**: Uses ORB (Oriented FAST and Rotated BRIEF) features for robust image matching
 - **Image Alignment**: Automatically aligns multiple handheld photos to a reference image
 - **Smart Cropping**: Removes black borders and computes optimal crop regions
-- **GUI Interface**: Modern PyQt6-based graphical interface for easy image selection and preview
-- **CLI Support**: Command-line interface for batch processing and automation
-- **Cross-platform**: Works on Windows, macOS, and Linux
 
 ## Installation
 
@@ -40,7 +37,6 @@ The following packages are automatically installed:
 - `numpy` - Numerical computing
 - `typer` - CLI framework
 - `rich` - Terminal formatting
-
 
 ## Usage
 
@@ -75,23 +71,9 @@ python -m open_align align \
 
 ## Output Files
 
-- `ref_matches_all.png` - Keypoints detected on the reference image (for debugging)
+- `ref_matches_all.png` - Keypoints detected on the reference image (the first one, for debugging)
 - `aligned_###.png` - Warped images before cropping (optional, for debugging)
 - `aligned_cropped_###.jpg` - Final aligned and cropped images
-
-## Example Workflow
-
-```bash
-# 1. Select images in the GUI or specify them on command line
-python -m open_align align image1.jpg image2.jpg image3.jpg
-
-# 2. The tool will:
-#    - Detect 4000 ORB features per image
-#    - Align all images to the first image (reference)
-#    - Compute the common overlap region
-#    - Crop to remove black borders
-#    - Save results as aligned_cropped_001.jpg, aligned_cropped_002.jpg, etc.
-```
 
 ## Contributing
 

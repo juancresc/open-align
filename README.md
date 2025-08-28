@@ -2,6 +2,17 @@
 
 A Python tool for aligning and cropping handheld photos using computer vision techniques. Open Align detects ORB features, estimates similarity transforms, warps images into a reference frame, and computes the common overlap crop to remove black borders from alignment.
 
+
+## Example
+
+Original images
+
+<img width="1500" height="281" alt="image" src="https://github.com/user-attachments/assets/7e61b6b5-51b2-458a-82c4-e35476d74610" />
+
+Aligned images
+
+<img width="1500" height="283" alt="image (1)" src="https://github.com/user-attachments/assets/31bcc804-9fa8-4189-a54f-51d59bf1fe84" />
+
 ## Features
 
 - **Feature Detection**: Uses ORB (Oriented FAST and Rotated BRIEF) features for robust image matching
